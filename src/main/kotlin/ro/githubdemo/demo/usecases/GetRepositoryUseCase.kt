@@ -6,8 +6,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import ro.githubdemo.demo.controllers.CustomAppException
-import ro.githubdemo.demo.service.RepositoryDetails
-import ro.githubdemo.demo.service.RepositoryService
+import ro.githubdemo.demo.usecases.contract.RepositoryService
 
 
 @Component
@@ -16,7 +15,7 @@ class GetRepositoryUseCase(
 ) : UseCaseStructure<String, String, RepositoryWithBranches>() {
     override fun validateRequest(headers: Map<String, String>) {
         when {
-            headers[HttpHeaders.CONTENT_TYPE] != MediaType.APPLICATION_JSON_VALUE -> throw CustomAppException.InvalidHeader()
+            headers["content-type"] != MediaType.APPLICATION_JSON_VALUE -> throw CustomAppException.InvalidHeader()
         }
     }
 
@@ -35,9 +34,3 @@ class GetRepositoryUseCase(
         }
     }
 }
-
-data class RepositoryWithBranches(
-    val name: String,
-    val login: String,
-    val branches: List<RepositoryDetails>
-)

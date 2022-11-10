@@ -13,6 +13,9 @@ import ro.githubdemo.demo.config.AppProperties
 import ro.githubdemo.demo.controllers.CustomAppException
 import ro.githubdemo.demo.service.model.RepositoryBranchResponse
 import ro.githubdemo.demo.service.model.RepositoryResponse
+import ro.githubdemo.demo.usecases.contract.model.RepositoryData
+import ro.githubdemo.demo.usecases.contract.model.Branch
+import ro.githubdemo.demo.usecases.contract.RepositoryService
 
 @Repository
 class RepositoryServiceImpl(
@@ -37,7 +40,7 @@ class RepositoryServiceImpl(
         }
 
 
-    override suspend fun getBranchesFor(username: String, repositoryName: String): List<RepositoryDetails> =
+    override suspend fun getBranchesFor(username: String, repositoryName: String): List<Branch> =
         handleRequest {
             webClient.get()
                 .uri("${properties.githubUrl}/repos/${username}/${repositoryName}/branches")

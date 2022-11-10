@@ -1,6 +1,6 @@
 package ro.githubdemo.demo.service.model
 
-import ro.githubdemo.demo.service.RepositoryDetails
+import ro.githubdemo.demo.usecases.contract.model.Branch
 import kotlin.RuntimeException
 
 data class RepositoryBranchResponse(
@@ -8,9 +8,9 @@ data class RepositoryBranchResponse(
     val commit: RepositoryBranchCommit? = null
 ) {
     companion object {
-        fun to(repositoryBranchResponse: RepositoryBranchResponse): RepositoryDetails =
-            RepositoryDetails(
-                branchName = repositoryBranchResponse.name ?: throw RuntimeException("Invalid value!"),
+        fun to(repositoryBranchResponse: RepositoryBranchResponse): Branch =
+            Branch(
+                name = repositoryBranchResponse.name ?: throw RuntimeException("Invalid value!"),
                 lastCommitSha = repositoryBranchResponse.commit?.sha ?: throw RuntimeException("Invalid value!")
             )
     }

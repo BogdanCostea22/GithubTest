@@ -1,4 +1,4 @@
-package ro.githubdemo.demo.service
+package ro.githubdemo.demo.usecases.contract.model
 
 data class RepositoryData(
     val name: String,

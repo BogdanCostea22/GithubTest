@@ -1,6 +1,6 @@
 package ro.githubdemo.demo.service.model
 
-import ro.githubdemo.demo.service.RepositoryData
+import ro.githubdemo.demo.usecases.contract.model.RepositoryData
 
 data class RepositoryResponse(
     val id: String? = null,
