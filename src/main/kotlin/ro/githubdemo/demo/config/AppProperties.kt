@@ -6,5 +6,6 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConfigurationProperties(prefix = "tra")
 @ConstructorBinding
 data class AppProperties(
-    val githubUrl: String
+    val githubUrl: String,
+    val githubToken: String,
 )

@@ -3,6 +3,7 @@ package ro.githubdemo.demo.service
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Repository
@@ -32,6 +33,7 @@ class RepositoryServiceImpl(
         handleRequest(::githubErrorMapper) {
             webClient.get()
                 .uri("${properties.githubUrl}/users/${username}/repos")
+                .header(HttpHeaders.AUTHORIZATION, properties.githubToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .awaitBody<List<RepositoryResponse>>()
@@ -40,10 +42,17 @@ class RepositoryServiceImpl(
         }
 
 
+    private fun handleErrorsForBranchCall(webClientResponseException: WebClientResponseException): CustomAppException =
+        when (webClientResponseException.statusCode) {
+            HttpStatus.NOT_FOUND -> CustomAppException.UserNotFound()
+            else -> CustomAppException.GithubConnectionProblem()
+        }
+
     override suspend fun getBranchesFor(username: String, repositoryName: String): List<Branch> =
-        handleRequest {
+        handleRequest(::handleErrorsForBranchCall) {
             webClient.get()
                 .uri("${properties.githubUrl}/repos/${username}/${repositoryName}/branches")
+                .header(HttpHeaders.AUTHORIZATION, properties.githubToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .awaitBody<List<RepositoryBranchResponse>>()

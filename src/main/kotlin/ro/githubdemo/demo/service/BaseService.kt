@@ -5,10 +5,9 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import ro.githubdemo.demo.controllers.CustomAppException
 
 open class BaseService {
-
     private fun basicMapper(webClientResponseException: WebClientResponseException): CustomAppException =
         when (webClientResponseException.statusCode) {
-            HttpStatus.NOT_FOUND -> CustomAppException.NotfoundException()
+            HttpStatus.NOT_FOUND -> CustomAppException.NotFoundException()
             else -> CustomAppException.ConnectionProblem()
         }
 
@@ -19,6 +18,7 @@ open class BaseService {
         try {
             request.invoke()
         } catch (exc: Exception) {
+            println(exc.message)
             when (exc) {
                 is WebClientResponseException -> {
                     throw errorMapper(exc)
